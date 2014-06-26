@@ -1,5 +1,15 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	h1= title
+	h2 Creating a new project:
+	form(action="/projects/create", method="post")
+		input(type="text", name="name", placeholder="名稱")
+		input(type="text", name="title", placeholder="標題")
+		input(type="submit")
+	if (projects.length)
+		ul
+			each project in projects
+				li= project.name
+	else
+		p No Projects
