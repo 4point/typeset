@@ -28,8 +28,14 @@ body {
 	border-radius: .3em;
 	box-shadow: 2px 2px 3px 1px #ccc;
 	box-sizing: border-box;
-	padding-top: 155px;
 	overflow: hidden;
+	position: relative;
+}
+
+#palettes .palette .info {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
 }
 
 #palettes .palette span {
@@ -40,4 +46,11 @@ body {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+#palettes .palette .delete {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: .3em;
 }

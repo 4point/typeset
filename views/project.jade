@@ -9,8 +9,10 @@ block content
 			ul#palettes
 				each palette in project.palettes
 					li.palette(style="background-color: #{palette.color}")
-						span.name= palette.name
-						span.color= palette.color
+						.info
+							span.name= palette.name
+							span.color= palette.color
+						a.delete(href="/projects/" + project.id + "/palettes/" + palette.id + "/delete") delete
 		form(action="/projects/" + project.id + "/palettes", method="post")
 			input(type="color", name="color", placeholder="顏色", required)
 			input(type="text", name="name", placeholder="描述", required)

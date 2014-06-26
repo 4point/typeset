@@ -44,4 +44,15 @@ router.post('/:id/palettes', function(req, res) {
   })
 });
 
+router.get('/:project/palettes/:id/delete', function(req, res) {
+  db.Palette.find({ where: { id: req.param('id') } }).success(function(palette) {
+    if (palette)
+      palette.destroy().success(function() {
+        res.redirect('/projects/' + req.param('project'))
+      })
+    else
+        res.redirect('/')
+  })
+});
+
 module.exports = router;
