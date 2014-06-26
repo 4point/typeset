@@ -9,17 +9,37 @@ router.post('/create', function(req, res) {
 });
 
 router.get('/:id', function(req, res) {
-  db.Project.find({ where: { id: req.param('id') } }).success(function(project) {
-    res.render('project', {
-      project: project
-    })
+  db.Project.find({
+      where: {id: req.param('id') },
+      include: [ db.Palette ]
+    }).success(function(project) {
+    console.log(project)
+    if (project)
+      res.render('project', {
+        project: project
+      })
+    else
+      res.redirect('/')
   })
 });
 
 router.get('/:id/delete', function(req, res) {
   db.Project.find({ where: { id: req.param('id') } }).success(function(project) {
-    project.destroy().success(function() {
-      res.redirect('/')
+    if (project)
+      project.destroy().success(function() {
+        res.redirect('/')
+      })
+    else
+        res.redirect('/')
+  })
+});
+
+router.post('/:id/palettes', function(req, res) {
+  db.Project.find({ where: { id: req.param('id') } }).success(function(project) {
+    db.Palette.create({ name: req.param('name'), color: req.param('color') }).success(function(palette) {
+      palette.setProject(project).success(function() {
+        res.redirect('/projects/' + req.param('id'))
+      })
     })
   })
 });

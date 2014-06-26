@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     title: DataTypes.STRING
   }, {
     associate: function(models) {
-      Project.hasMany(models.Color)
+      Project.hasMany(models.Palette)
     }
   })
 

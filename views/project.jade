@@ -1,5 +1,17 @@
 extends layout
 
 block content
-	h1= project.title
-	a(href="/projects/" + project.id + "/delete") Delete
+	article#project
+		header
+			h1= project.title
+			a(href="/projects/" + project.id + "/delete") Delete
+		if (project.palettes.length)
+			ul#palettes
+				each palette in project.palettes
+					li.palette(style="background-color: #{palette.color}")
+						span.name= palette.name
+						span.color= palette.color
+		form(action="/projects/" + project.id + "/palettes", method="post")
+			input(type="color", name="color", placeholder="顏色", required)
+			input(type="text", name="name", placeholder="描述", required)
+			input(type="submit")
