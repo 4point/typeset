@@ -4,12 +4,13 @@ block content
 	h1= title
 	h2 Creating a new project:
 	form(action="/projects/create", method="post")
-		input(type="text", name="name", placeholder="名稱")
-		input(type="text", name="title", placeholder="標題")
+		input(type="text", name="name", placeholder="名稱", pattern="^[a-z0-9_]+$", required)
+		input(type="text", name="title", placeholder="標題", required)
 		input(type="submit")
 	if (projects.length)
-		ul
+		ul#projects
 			each project in projects
-				li= project.name
+				li.project
+					a(href="/projects/#{project.id}")= project.title
 	else
 		p No Projects

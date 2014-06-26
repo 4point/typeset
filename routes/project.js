@@ -8,4 +8,20 @@ router.post('/create', function(req, res) {
   })
 });
 
+router.get('/:id', function(req, res) {
+  db.Project.find({ where: { id: req.param('id') } }).success(function(project) {
+    res.render('project', {
+      project: project
+    })
+  })
+});
+
+router.get('/:id/delete', function(req, res) {
+  db.Project.find({ where: { id: req.param('id') } }).success(function(project) {
+    project.destroy().success(function() {
+      res.redirect('/')
+    })
+  })
+});
+
 module.exports = router;
