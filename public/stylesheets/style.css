@@ -54,3 +54,21 @@ body {
 	left: 0;
 	padding: .3em;
 }
+
+#project section.typo a.edit {
+	margin-left: .5em;
+}
+
+#project section.typo ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#project section.typo ul li {
+	margin: .5em 0;
+}
+
+#project section.typo ul li .value {
+	margin: 0 1em;
+}

@@ -13,9 +13,11 @@ router.get('/:id', function(req, res) {
       where: {id: req.param('id') },
       include: [ db.Palette ]
     }).success(function(project) {
-    console.log(project)
+
     if (project)
       res.render('project', {
+        title: project.title,
+        font: project.font,
         project: project
       })
     else
@@ -54,5 +56,33 @@ router.get('/:project/palettes/:id/delete', function(req, res) {
         res.redirect('/')
   })
 });
+
+router.post('/:id/typo', function(req, res) {
+  db.Project.find({ where: { id: req.param('id') } }).success(function(project) {
+    project.typo = req.param('typo');
+    project.save(['typo']).success(function() {
+        res.json({ url: '/projects/' + req.param('id') })
+    })
+  })
+});
+
+router.post('/:id/font', function(req, res) {
+  db.Project.find({ where: { id: req.param('id') } }).success(function(project) {
+    project.font = req.param('font');
+    project.save(['font']).success(function() {
+        res.json({ url: '/projects/' + req.param('id') })
+    })
+  })
+});
+
+router.post('/:id/typography', function(req, res) {
+  db.Project.find({ where: { id: req.param('id') } }).success(function(project) {
+    project.typography = req.param('typography');
+    project.save(['typography']).success(function() {
+        res.json({ url: '/projects/' + req.param('id') })
+    })
+  })
+});
+
 
 module.exports = router;

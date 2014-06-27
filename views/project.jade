@@ -1,19 +1,95 @@
 extends layout
 
 block content
-	article#project
+	a(href="/", style="float: right") Projects
+	article#project(data-id="#{project.id}")
 		header
 			h1= project.title
-			a(href="/projects/" + project.id + "/delete") Delete
-		if (project.palettes.length)
-			ul#palettes
-				each palette in project.palettes
-					li.palette(style="background-color: #{palette.color}")
-						.info
-							span.name= palette.name
-							span.color= palette.color
-						a.delete(href="/projects/" + project.id + "/palettes/" + palette.id + "/delete") delete
-		form(action="/projects/" + project.id + "/palettes", method="post")
-			input(type="color", name="color", placeholder="顏色", required)
-			input(type="text", name="name", placeholder="描述", required)
-			input(type="submit")
+			a(href="/projects/" + project.id + "/delete", style="float: right") Delete
+		section.palette
+			h2 Palettes
+			if (project.palettes.length)
+				ul#palettes
+					each palette in project.palettes
+						li.palette(style="background-color: #{palette.color}")
+							.info
+								span.name= palette.name
+								span.color= palette.color
+							a.delete(href="/projects/" + project.id + "/palettes/" + palette.id + "/delete") delete
+			form(action="/projects/" + project.id + "/palettes", method="post")
+				input(type="color", name="color", placeholder="顏色", required)
+				input(type="text", name="name", placeholder="描述", required)
+				input(type="submit")
+		section.typo
+			h2 Typography
+			style(scoped).
+				p, li {
+					font-family: '#{project.font}', sans-serif;
+				}
+			- if (project.typo)
+				style(scoped).
+					p, li {
+						font-size: #{project.typo}
+					}
+			p.font Font: #{project.font || 'N/A'}
+				a.edit(href="javascript: void(0);") Edit
+			p.base base: #{project.typo || 'N/A'}
+				a.edit(href="javascript: void(0);") Edit
+			if (project.typography)
+				ul
+					each item in project.typography
+						li
+							span.name(style="font-size: #{item.value}")= item.name
+							span.value= item.value
+							a.delete(href="javascript: void(0);") Delete
+			form(action="/projects/"+ project.id + "/typography", method="post")
+				input(type="text", name="name", placeholder="名稱: Heading", required)
+				input(type="text", name="value", placeholder="數值: 1.5em", required)
+				input(type="submit")
+	script.
+		$(function(){
+			var id = $('#project').data('id');
+			var typography = [];
+			$('#project section.typo ul li').each(function(){
+				var name = $(this).find('.name').text();
+				var value = $(this).find('.value').text();
+				typography.push({name: name, value: value});
+			});
+			$('#project section.typo .base a.edit').click(function(){
+				var typo = window.prompt('base font-size?');
+				if (typo.indexOf('0') == 0)
+					alert('It should not be zero!');
+				else if (typo)
+					$.post('/projects/' + id + '/typo', {typo: typo}, function(data) {
+						window.location.reload();
+					});
+			});
+			$('#project section.typo .font a.edit').click(function(){
+				var font = window.prompt('default font?');
+				if (font)
+					$.post('/projects/' + id + '/font', {font: font}, function(data) {
+						window.location.reload();
+					});
+			});
+			$('#project section.typo a.delete').click(function(event){
+				$(this).parents('li').first().remove();
+				typography = [];
+				$('#project section.typo ul li').each(function(){
+					var name = $(this).find('.name').text();
+					var value = $(this).find('.value').text();
+					typography.push({name: name, value: value});
+				});
+				$.post('/projects/' + id + '/typography', {typography: typography}, function(data) {
+					window.location.reload();
+				});
+			});
+			$('#project section.typo form').submit(function(event){
+				event.preventDefault();
+				var name = $(this).find('input[name="name"]').val();
+				var value = $(this).find('input[name="value"]').val();
+				typography.push({name: name, value: value});
+				$.post('/projects/' + id + '/typography', {typography: typography}, function(data) {
+					window.location.reload();
+				});
+			});
+		});
