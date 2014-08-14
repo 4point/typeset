@@ -11,7 +11,10 @@ router.post('/create', function(req, res) {
 router.get('/:id', function(req, res) {
   db.Project.find({
       where: {id: req.param('id') },
-      include: [ db.Palette ]
+      include: [ db.Palette, {
+          model: db.Color,
+          include: [db.Palette]
+      }],
     }).success(function(project) {
 
     if (project)
@@ -50,6 +53,27 @@ router.get('/:project/palettes/:id/delete', function(req, res) {
   db.Palette.find({ where: { id: req.param('id') } }).success(function(palette) {
     if (palette)
       palette.destroy().success(function() {
+        res.redirect('/projects/' + req.param('project'))
+      })
+    else
+        res.redirect('/')
+  })
+});
+
+router.post('/:id/colors', function(req, res) {
+  db.Project.find({ where: { id: req.param('id') }, include: [db.Palette] }).success(function(project) {
+    db.Color.create({ title: req.param('title'), PaletteId: project.palettes[req.param('color') - 1].id }).success(function(color) {
+      color.setProject(project).success(function() {
+        res.redirect('/projects/' + req.param('id'))
+      })
+    })
+  })
+});
+
+router.get('/:project/colors/:id/delete', function(req, res) {
+  db.Color.find({ where: { id: req.param('id') } }).success(function(color) {
+    if (color)
+      color.destroy().success(function() {
         res.redirect('/projects/' + req.param('project'))
       })
     else

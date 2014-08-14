@@ -55,6 +55,25 @@ body {
 	padding: .3em;
 }
 
+#colors {
+	margin: 2em 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#colors .color {
+	padding-left: 1em;
+	margin: 1em 0;
+}
+
+#colors .color .delete {
+	margin-left: 1em;
+}
+
+#project {
+	padding-bottom: 6em;
+}
+
 #project section.typo a.edit {
 	margin-left: .5em;
 }

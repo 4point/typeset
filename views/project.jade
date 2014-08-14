@@ -8,7 +8,7 @@ block content
 			a(href="/projects/" + project.id + "/delete", style="float: right") Delete
 		section.palette
 			h2 Palettes
-			if (project.palettes.length)
+			if (project.palettes && project.palettes.length)
 				ul#palettes
 					each palette in project.palettes
 						li.palette(style="background-color: #{palette.color}")
@@ -17,8 +17,18 @@ block content
 								span.color= palette.color
 							a.delete(href="/projects/" + project.id + "/palettes/" + palette.id + "/delete") delete
 			form(action="/projects/" + project.id + "/palettes", method="post")
-				input(type="color", name="color", placeholder="顏色", required)
-				input(type="text", name="name", placeholder="描述", required)
+				input(type="color", name="color", placeholder="顏料", required)
+				input(type="text", name="name", placeholder="描述: 主色調", required)
+				input(type="submit")
+			h2 Colors
+			if (project.colors && project.colors.length)
+				ul#colors
+					each color in project.colors
+						li.color(style="border-left: 20px solid #{color.palette ? color.palette.color : 'transparent'}")= color.title
+							a.delete(href="/projects/" + project.id + "/colors/" + color.id + "/delete") delete
+			form(action="/projects/" + project.id + "/colors", method="post")
+				input(type="number", name="color", placeholder="色彩", min="1" max="#{project.palettes.length}", value="1", required)
+				input(type="text", name="title", placeholder="名稱: 文字選取", required)
 				input(type="submit")
 		section.typo
 			h2 Typography

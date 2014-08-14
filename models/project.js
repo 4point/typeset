@@ -7,7 +7,9 @@ module.exports = function(sequelize, DataTypes) {
     typography: DataTypes.TEXT
   }, {
     associate: function(models) {
-      Project.hasMany(models.Palette)
+      Project
+        .hasMany(models.Palette)
+        .hasMany(models.Color)
     },
     getterMethods: {
       typography: function(){
