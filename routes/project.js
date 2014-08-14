@@ -77,7 +77,10 @@ router.post('/:id/font', function(req, res) {
 
 router.post('/:id/typography', function(req, res) {
   db.Project.find({ where: { id: req.param('id') } }).success(function(project) {
-    project.typography = req.param('typography');
+    if (req.param('typography'))
+      project.typography = req.param('typography');
+    else
+      project.typography = null;
     project.save(['typography']).success(function() {
         res.json({ url: '/projects/' + req.param('id') })
     })
